@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Google Apps Script API Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      text-align: center;
+      padding: 20px;
+    }
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: inline-block;
+      margin-top: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    input[type="button"] {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-transform: uppercase;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    input[type="button"]:hover {
+      background-color: #218838;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    #result {
+      margin-top: 20px;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <form id="loginForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" placeholder="Enter your username"><br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" placeholder="Enter your password"><br><br>
+    <input type="button" value="Submit" onclick="handleSubmit()">
+  </form>
+  <div id="result"></div>
+
+  <script>
+    async function handleSubmit() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const response = await fetch('https://script.google.com/macros/s/AKfycbx4dQH0K2eigDoNqJrTJXfcr7TwuF2SLb_u7t3r9cChd_k4SdNYjQxF1nMC4G70T7A9/exec?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password));
+      const data = await response.json();
+
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = '';
+      if (data.length === 0) {
+        resultDiv.innerHTML = '<div class="error">Invalid username or password</div>';
+      } else {
+        let table = '<table><tr><th>Item Name</th><th>Quantity</th></tr>';
+        data.forEach(row => {
+          table += <tr><td>${row.itemName}</td><td>${row.quantity}</td></tr>;
+        });
+        table += '</table>';
+        resultDiv.innerHTML = table;
+      }
+    }
+  </script>
+</body>
+</html>
